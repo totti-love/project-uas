@@ -77,7 +77,8 @@ class KunjunganController extends Controller
         // validasi input
         $input = $request->validate([
             "kode"      => "required|unique:kunjungans",
-            "tanggal"   => "required", 
+            "tanggal"   => "required",
+            "keluhan"   => "required",
             "pasien_id" => "required",
             "dokter_id" => "required"
         ]);
@@ -119,7 +120,8 @@ class KunjunganController extends Controller
         // validasi input
         $input = $request->validate([
             "kode"      => "required|unique:kunjungans",
-            "tanggal"   => "required", 
+            "tanggal"   => "required",
+            "keluhan"   => "required",
             "pasien_id" => "required",
             "dokter_id" => "required"
         ]);
