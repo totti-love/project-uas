@@ -10,5 +10,5 @@ class Dokter extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['nama','keahlian', 'jenis_kelamin'];
 }

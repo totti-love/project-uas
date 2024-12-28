@@ -9,5 +9,5 @@ class Obat extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = [ 'id'];
+     protected $fillable = ['kode','nama', 'jumlah'];
 }

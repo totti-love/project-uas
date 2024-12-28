@@ -10,7 +10,7 @@ class RekamMedis extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = [ 'id'];
+     protected $fillable = ['kode','tanggal', 'kunjungan_id', 'obat_id'];
 
     public function kunjungan(){
         return $this->belongsTo(Kunjungan::class, 'kunjungan_id', 'id');

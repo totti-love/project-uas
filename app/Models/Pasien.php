@@ -10,5 +10,5 @@ class Pasien extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = ['id'];
+     protected $fillable = ['nama','tanggal_lahir', 'jenis_kelamin', 'alamat', 'no_telp'];
 }

@@ -10,7 +10,7 @@ class Kunjungan extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guarded = [ 'id'];
+     protected $fillable = ['kode','tanggal', 'keluhan', 'pasien_id', 'dokter_id'];
 
     public function pasien(){
         return $this->belongsTo(Pasien::class, 'pasien_id', 'id');
