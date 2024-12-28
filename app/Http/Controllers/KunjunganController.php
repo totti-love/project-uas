@@ -73,6 +73,23 @@ class KunjunganController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getKunjunganById($id)
+    {
+    // Cari kunjungan berdasarkan ID
+        $kunjungan = Kunjungan::find($id);
+
+        // Jika tidak ditemukan, kembalikan respon error
+        if (!$kunjungan) {
+            return response()->json([
+                'message' => 'kunjungan tidak ditemukan',
+            ], 404);
+        }
+
+        // Kembalikan data kunjungan
+        return response()->json($kunjungan, 200);
+    }
+    
+
     public function storeKunjungan(Request $request){
         // validasi input
         $input = $request->validate([

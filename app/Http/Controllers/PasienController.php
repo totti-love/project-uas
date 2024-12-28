@@ -71,6 +71,22 @@ class PasienController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getPasienById($id)
+    {
+        // Cari obat berdasarkan ID
+        $pasien = Pasien::find($id);
+
+        // Jika tidak ditemukan, kembalikan respon error
+        if (!$pasien) {
+            return response()->json([
+                'message' => 'pasien tidak ditemukan',
+            ], 404);
+        }
+
+        // Kembalikan data pa$pasien
+        return response()->json($pasien, 200);
+    }
+
     public function storePasien(Request $request){
         // validasi input
         $input = $request->validate([

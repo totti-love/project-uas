@@ -76,6 +76,22 @@ class DokterController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getDokterById($id)
+    {
+    // Cari obat berdasarkan ID
+    $dokter = Dokter::find($id);
+
+    // Jika tidak ditemukan, kembalikan respon error
+    if (!$dokter) {
+        return response()->json([
+            'message' => 'dokter tidak ditemukan',
+        ], 404);
+    }
+
+    // Kembalikan data dokter
+    return response()->json($dokter, 200);
+}
+
     public function storeDokter(Request $request){
         // validasi input
         $input = $request->validate([

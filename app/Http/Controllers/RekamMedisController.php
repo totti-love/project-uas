@@ -73,6 +73,22 @@ class RekamMedisController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getRekamMedisById($id)
+    {
+        // Cari obat berdasarkan ID
+        $rekamMedis = RekamMedis::find($id);
+
+        // Jika tidak ditemukan, kembalikan respon error
+        if (!$rekamMedis) {
+            return response()->json([
+                'message' => 'Rekam Medis tidak ditemukan',
+            ], 404);
+        }
+
+        // Kembalikan data rekamMedis
+        return response()->json($rekamMedis, 200);
+    }
+
     public function storeRekamMedis(Request $request){
         // validasi input
         $input = $request->validate([
