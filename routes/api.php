@@ -19,7 +19,7 @@ Route::delete('dokter/{id}', [DokterController::class, 'destroyDokter']);
 Route::put('dokter/{id}', [DokterController::class, 'updateDokter']);
 
 Route::get('pasien', [PasienController::class, 'getPasien']);
-Route::get('dokter/{id}', [DokterController::class, 'getPasienById']);
+Route::get('pasien/{id}', [DokterController::class, 'getPasienById']);
 Route::post('pasien', [PasienController::class, 'storePasien']);
 Route::delete('pasien/{id}', [PasienController::class, 'destroyPasien']);
 Route::put('pasien/{id}', [PasienController::class, 'updatePasien']);
