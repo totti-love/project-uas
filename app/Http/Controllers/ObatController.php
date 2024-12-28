@@ -70,6 +70,23 @@ class ObatController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getObatById($id)
+{
+    // Cari obat berdasarkan ID
+    $obat = Obat::find($id);
+
+    // Jika tidak ditemukan, kembalikan respon error
+    if (!$obat) {
+        return response()->json([
+            'message' => 'Obat tidak ditemukan',
+        ], 404);
+    }
+
+    // Kembalikan data obat
+    return response()->json($obat, 200);
+}
+
+
     public function storeObat(Request $request){
         // validasi input
         $input = $request->validate([

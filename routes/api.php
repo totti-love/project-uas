@@ -23,6 +23,7 @@ Route::delete('pasien/{id}', [PasienController::class, 'destroyPasien']);
 Route::put('pasien/{id}', [PasienController::class, 'updatePasien']);
 
 Route::get('obat', [ObatController::class, 'getObat']);
+Route::get('obat/{id}', [ObatController::class, 'getObatById']);
 Route::post('obat', [ObatController::class, 'storeObat']);
 Route::delete('obat/{id}', [ObatController::class, 'destroyObat']);
 Route::put('obat/{id}', [ObatController::class, 'updateObat']);
