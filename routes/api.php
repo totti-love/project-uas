@@ -15,6 +15,7 @@ Route::get('/user', function (Request $request) {
 Route::get('dokter', [DokterController::class, 'getDokter']);
 Route::get('dokter/{id}', [DokterController::class, 'getDokterById']);
 Route::post('dokter', [DokterController::class, 'storeDokter']);
+
 Route::delete('dokter/{id}', [DokterController::class, 'destroyDokter']);
 Route::put('dokter/{id}', [DokterController::class, 'updateDokter']);
 
