@@ -12,12 +12,7 @@ class DokterController extends Controller
      */
     public function index()
     {
-        // Panggil model Fakultas
-        $result = Dokter::all();
-        // dd($result);
-
-        // Kirim data $result ke views fakultas/index.blade.php
-        return view('dokter.index')->with('dokter', $result);
+    
     }
 
     /**
