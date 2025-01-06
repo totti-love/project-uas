@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Kunjungan;
 use Illuminate\Http\Request;
 
@@ -64,9 +63,7 @@ class KunjunganController extends Controller
     }
 
     public function getKunjungan(){
-        $response['data'] = Kunjungan::all();
-        $response['data'] = Kunjungan::with('pasien')->get();
-        $response['data'] = Kunjungan::with('dokter')->get();
+        $response['data'] = Kunjungan::with('pasien.dokter')->get();
         $response['message'] = 'List data kunjungan';
         $response['success'] = true;
 
