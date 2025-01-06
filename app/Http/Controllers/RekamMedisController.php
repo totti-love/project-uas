@@ -65,7 +65,8 @@ class RekamMedisController extends Controller
 
     public function getRekamMedis(){
 
-        $response['data'] = RekamMedis::with('kunjungan.obat')->get();
+        $response['data'] = RekamMedis::with('kunjungan')->get();
+        $response['data'] = RekamMedis::with('obat')->get();
         $response['message'] = 'List data Rekam Medis';
         $response['success'] = true;
 
