@@ -111,9 +111,9 @@ class ObatController extends Controller
     public function destroyObat($id)
     {
         // cari data di tabel fakultas berdasarkan "id" fakultas
-        $Obat = Obat::find($id);
+        $obat = Obat::find($id);
         // dd($Obat);
-        $hasil = $Obat->delete();
+        $hasil = $obat->delete();
         if($hasil){ // jika data berhasil disimpan
             $response['success'] = true;
             $response['message'] = "Data Obat berhasil dihapus";
@@ -127,7 +127,7 @@ class ObatController extends Controller
 
     public function updateObat(Request $request, $id)
     {
-        $Obat = Obat::find($id);
+        $obat = Obat::find($id);
        
         // validasi input
         $input = $request->validate([
@@ -137,7 +137,7 @@ class ObatController extends Controller
         ]);
 
         // update data
-        $hasil = $Obat->update($input);
+        $hasil = $obat->update($input);
 
         if($hasil){ // jika data berhasil disimpan
             $response['success'] = true;
