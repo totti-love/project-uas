@@ -131,7 +131,7 @@ class ObatController extends Controller
        
         // validasi input
         $input = $request->validate([
-            "kode"      => "required|unique:obats",
+            "kode"      => "required",
             "nama" => "required",
             "jumlah" => "required"
         ]);
