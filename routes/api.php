@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\KunjunganController;
@@ -41,3 +42,7 @@ Route::get('rekamMedis/{id}', [RekamMedisController::class, 'getRekamMedisById']
 Route::post('rekamMedis', [RekamMedisController::class, 'storeRekamMedis']);
 Route::delete('rekamMedis/{id}', [RekamMedisController::class, 'destroyRekamMedis']);
 Route::put('rekamMedis/{id}', [RekamMedisController::class, 'updateRekamMedis']);
+
+Route::post('login', [AuthController::class, 'login']);
+
+Route::post('register', [AuthController::class, 'register']);
