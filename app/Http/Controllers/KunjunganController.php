@@ -87,28 +87,39 @@ class KunjunganController extends Controller
     }
     
 
-    public function storeKunjungan(Request $request){
-        // validasi input
-        $input = $request->validate([
-            "kode"      => "required|unique:kunjungans",
-            "tanggal"   => "required",
-            "keluhan"   => "required",
-            "pasien_id" => "required",
-            "dokter_id" => "required"
-        ]);
+    public function storeKunjungan(Request $request)
+{
+    // Validasi input tanpa kode karena akan dibuat otomatis
+    $input = $request->validate([
+        "tanggal"   => "required",
+        "keluhan"   => "required",
+        "pasien_id" => "required|exists:pasiens,id",
+        "dokter_id" => "required|exists:dokters,id"
+    ]);
 
-        // simpan
-        $hasil = Kunjungan::create($input);
-        if($hasil){ // jika data berhasil disimpan
-            $response['success'] = true;
-            $response['message'] = $request->kode." berhasil disimpan";
-            return response()->json($response, 201); // 201 Created
-        } else {
-            $response['success'] = false;
-            $response['message'] = $request->kode." gagal disimpan";
-            return response()->json($response, 400); // 400 Bad Request
-        }
+    // Buat kode otomatis
+    $latestRecord = Kunjungan::latest('id')->first(); // Ambil data terakhir
+    $nextNumber = $latestRecord ? ((int)substr($latestRecord->kode, 2) + 1) : 1; // Hitung nomor urut berikutnya
+    $kode = 'KU' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT); // Format kode (KU0001, KU0002, ...)
+
+    // Tambahkan kode ke input
+    $input['kode'] = $kode;
+
+    // Simpan data ke database
+    $hasil = Kunjungan::create($input);
+
+    // Respon berdasarkan hasil penyimpanan
+    if ($hasil) {
+        $response['success'] = true;
+        $response['message'] = $kode . " berhasil disimpan";
+        return response()->json($response, 201); // 201 Created
+    } else {
+        $response['success'] = false;
+        $response['message'] = $kode . " gagal disimpan";
+        return response()->json($response, 400); // 400 Bad Request
     }
+}
+
 
     public function destroyKunjungan($id)
     {
@@ -133,7 +144,6 @@ class KunjunganController extends Controller
        
         // validasi input
         $input = $request->validate([
-            "kode"      => "required",
             "tanggal"   => "required",
             "keluhan"   => "required",
             "pasien_id" => "required",

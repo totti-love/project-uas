@@ -87,26 +87,37 @@ class ObatController extends Controller
     }
 
 
-    public function storeObat(Request $request){
-        // validasi input
-        $input = $request->validate([
-            "kode"      => "required|unique:obats",
-            "nama" => "required",
-            "jumlah" => "required"
-        ]);
+public function storeObat(Request $request)
+{
+    // Validasi input tanpa kode karena akan dibuat otomatis
+    $input = $request->validate([
+        "nama"   => "required",
+        "jumlah" => "required|integer|min:1"
+    ]);
 
-        // simpan
-        $hasil = Obat::create($input);
-        if($hasil){ // jika data berhasil disimpan
-            $response['success'] = true;
-            $response['message'] = $request->nama." berhasil disimpan";
-            return response()->json($response, 201); // 201 Created
-        } else {
-            $response['success'] = false;
-            $response['message'] = $request->nama." gagal disimpan";
-            return response()->json($response, 400); // 400 Bad Request
-        }
+    // Buat kode otomatis
+    $latestRecord = Obat::latest('id')->first(); // Ambil data terakhir
+    $nextNumber = $latestRecord ? ((int)substr($latestRecord->kode, 2) + 1) : 1; // Hitung nomor urut berikutnya
+    $kode = 'OB' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT); // Format kode (OB0001, OB0002, ...)
+
+    // Tambahkan kode ke input
+    $input['kode'] = $kode;
+
+    // Simpan data ke database
+    $hasil = Obat::create($input);
+
+    // Respon berdasarkan hasil penyimpanan
+    if ($hasil) {
+        $response['success'] = true;
+        $response['message'] = $request->nama . " berhasil disimpan dengan kode " . $kode;
+        return response()->json($response, 201); // 201 Created
+    } else {
+        $response['success'] = false;
+        $response['message'] = $request->nama . " gagal disimpan";
+        return response()->json($response, 400); // 400 Bad Request
     }
+}
+
 
     public function destroyObat($id)
     {
