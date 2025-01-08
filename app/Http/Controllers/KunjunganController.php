@@ -63,8 +63,7 @@ class KunjunganController extends Controller
     }
 
     public function getKunjungan(){
-        $response['data'] = Kunjungan::with('dokter')->get();
-        $response['data'] = Kunjungan::with('pasien')->get();
+        $response['data'] = Kunjungan::with(['dokter','pasien'])->get();
         $response['message'] = 'List data kunjungan';
         $response['success'] = true;
 
