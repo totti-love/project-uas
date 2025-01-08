@@ -66,6 +66,7 @@ class RekamMedisController extends Controller
     public function getRekamMedis(){
 
         $response['data'] = RekamMedis::with(['kunjungan','obat'])->get();
+        //$response['data'] = RekamMedis::with('obat')->get();
         $response['message'] = 'List data Rekam Medis';
         $response['success'] = true;
 
@@ -88,38 +89,27 @@ class RekamMedisController extends Controller
         return response()->json($rekamMedis, 200);
     }
 
-   public function storeRekamMedis(Request $request)
-{
-    // Validasi input tanpa kode karena akan dibuat otomatis
-    $input = $request->validate([
-        "tanggal"      => "required", 
-        "kunjungan_id" => "required",
-        "obat_id"      => "required"
-    ]);
+    public function storeRekamMedis(Request $request){
+        // validasi input
+        $input = $request->validate([
+            "kode"      => "required",
+            "tanggal"   => "required", 
+            "kunjungan_id" => "required",
+            "obat_id" => "required"
+        ]);
 
-    // Buat kode otomatis
-    $latestRecord = RekamMedis::latest('id')->first(); // Ambil data terakhir
-    $nextNumber = $latestRecord ? ((int)substr($latestRecord->kode, 2) + 1) : 1; // Hitung nomor urut berikutnya
-    $kode = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT); // Format kode (RM0001, RM0002, ...)
-
-    // Tambahkan kode ke input
-    $input['kode'] = $kode;
-
-    // Simpan data ke database
-    $hasil = RekamMedis::create($input);
-
-    // Respon berdasarkan hasil penyimpanan
-    if ($hasil) {
-        $response['success'] = true;
-        $response['message'] = $kode . " berhasil disimpan";
-        return response()->json($response, 201); // 201 Created
-    } else {
-        $response['success'] = false;
-        $response['message'] = $kode . " gagal disimpan";
-        return response()->json($response, 400); // 400 Bad Request
+        // simpan
+        $hasil = RekamMedis::create($input);
+        if($hasil){ // jika data berhasil disimpan
+            $response['success'] = true;
+            $response['message'] = $request->kode." berhasil disimpan";
+            return response()->json($response, 201); // 201 Created
+        } else {
+            $response['success'] = false;
+            $response['message'] = $request->kode." gagal disimpan";
+            return response()->json($response, 400); // 400 Bad Request
+        }
     }
-}
-
 
     public function destroyRekamMedis($id)
     {
