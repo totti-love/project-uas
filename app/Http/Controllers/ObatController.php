@@ -87,23 +87,35 @@ class ObatController extends Controller
     }
 
 
-    public function storeObat(Request $request){
-        // validasi input
+    public function storeObat(Request $request)
+    {
+        // Validasi input tanpa kode karena akan dibuat otomatis
         $input = $request->validate([
-            "kode"      => "required|unique:obats",
             "nama" => "required",
             "jumlah" => "required"
         ]);
 
-        // simpan
+        // Buat kode otomatis
+        $nextNumber = 1;
+        do {
+            $kode = 'OB' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT); // Format kode (RM0001, RM0002, ...)
+            $nextNumber++;
+        } while (Obat::where('kode', $kode)->exists()); // Cek apakah kode sudah ada di database
+
+        // Tambahkan kode ke input
+        $input['kode'] = $kode;
+
+        // Simpan data ke database
         $hasil = Obat::create($input);
-        if($hasil){ // jika data berhasil disimpan
+
+        // Respon berdasarkan hasil penyimpanan
+        if ($hasil) {
             $response['success'] = true;
-            $response['message'] = $request->nama." berhasil disimpan";
+            $response['message'] = $kode . " berhasil disimpan";
             return response()->json($response, 201); // 201 Created
         } else {
             $response['success'] = false;
-            $response['message'] = $request->nama." gagal disimpan";
+            $response['message'] = $kode . " gagal disimpan";
             return response()->json($response, 400); // 400 Bad Request
         }
     }

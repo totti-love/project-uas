@@ -89,27 +89,41 @@ class RekamMedisController extends Controller
         return response()->json($rekamMedis, 200);
     }
 
-    public function storeRekamMedis(Request $request){
-        // validasi input
+    public function storeRekamMedis(Request $request)
+    {
+        // Validasi input tanpa kode karena akan dibuat otomatis
         $input = $request->validate([
-            "kode"      => "required",
-            "tanggal"   => "required", 
+            "tanggal"      => "required", 
             "kunjungan_id" => "required",
-            "obat_id" => "required"
+            "obat_id"      => "required"
         ]);
 
-        // simpan
+        // Buat kode otomatis
+        $nextNumber = 1;
+        do {
+            $kode = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT); // Format kode (RM0001, RM0002, ...)
+            $nextNumber++;
+        } while (RekamMedis::where('kode', $kode)->exists()); // Cek apakah kode sudah ada di database
+
+        // Tambahkan kode ke input
+        $input['kode'] = $kode;
+
+        // Simpan data ke database
         $hasil = RekamMedis::create($input);
-        if($hasil){ // jika data berhasil disimpan
+
+        // Respon berdasarkan hasil penyimpanan
+        if ($hasil) {
             $response['success'] = true;
-            $response['message'] = $request->kode." berhasil disimpan";
+            $response['message'] = $kode . " berhasil disimpan";
             return response()->json($response, 201); // 201 Created
         } else {
             $response['success'] = false;
-            $response['message'] = $request->kode." gagal disimpan";
+            $response['message'] = $kode . " gagal disimpan";
             return response()->json($response, 400); // 400 Bad Request
         }
     }
+
+
 
     public function destroyRekamMedis($id)
     {
