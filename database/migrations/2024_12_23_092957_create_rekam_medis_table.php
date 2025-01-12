@@ -17,9 +17,7 @@ return new class extends Migration
             $table->string('kode', 10);
             $table->date('tanggal');
             $table->uuid('kunjungan_id');
-            $table->foreign('kunjungan_id')->references('id')->on('kunjungans');
-            $table->uuid('obat_id');
-            $table->foreign('obat_id')->references('id')->on('obats');
+            $table->foreign('kunjungan_id')->references('id')->on('kunjungans');;
             $table->timestamps();
         });
     }

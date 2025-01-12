@@ -90,38 +90,47 @@ class RekamMedisController extends Controller
     }
 
     public function storeRekamMedis(Request $request)
-    {
-        // Validasi input tanpa kode karena akan dibuat otomatis
-        $input = $request->validate([
-            "tanggal"      => "required", 
-            "kunjungan_id" => "required",
-            "obat_id"      => "required"
+{
+    // Validasi input
+    $validated = $request->validate([
+        'tanggal' => 'required|date',
+        'kunjungan_id' => 'required|exists:kunjungans,id',
+        'obat_id' => 'required', // Bisa ID tunggal atau array
+    ]);
+
+    // Buat kode otomatis untuk rekam medis
+    $nextNumber = 1;
+    do {
+        $kode = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        $nextNumber++;
+    } while (RekamMedis::where('kode', $kode)->exists());
+
+    // Simpan data rekam medis
+    $rekamMedis = RekamMedis::create([
+        'kode' => $kode,
+        'tanggal' => $validated['tanggal'],
+        'kunjungan_id' => $validated['kunjungan_id'],
+    ]);
+
+    // Pastikan obat_id selalu berupa array
+    $obatIds = is_array($validated['obat_id']) 
+        ? $validated['obat_id'] 
+        : [$validated['obat_id']]; // Jika ID tunggal, ubah menjadi array
+
+    // Simpan data ke tabel pivot
+    foreach ($obatIds as $obatId) {
+        RekamMedisObat::create([
+            'rekam_medis_id' => $rekamMedis->id,
+            'obat_id' => $obatId,
         ]);
-
-        // Buat kode otomatis
-        $nextNumber = 1;
-        do {
-            $kode = 'RM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT); // Format kode (RM0001, RM0002, ...)
-            $nextNumber++;
-        } while (RekamMedis::where('kode', $kode)->exists()); // Cek apakah kode sudah ada di database
-
-        // Tambahkan kode ke input
-        $input['kode'] = $kode;
-
-        // Simpan data ke database
-        $hasil = RekamMedis::create($input);
-
-        // Respon berdasarkan hasil penyimpanan
-        if ($hasil) {
-            $response['success'] = true;
-            $response['message'] = $kode . " berhasil disimpan";
-            return response()->json($response, 201); // 201 Created
-        } else {
-            $response['success'] = false;
-            $response['message'] = $kode . " gagal disimpan";
-            return response()->json($response, 400); // 400 Bad Request
-        }
     }
+
+    // Respon berhasil
+    return response()->json([
+        'success' => true,
+        'message' => 'Rekam medis dan obat berhasil disimpan.',
+    ], 201);
+}
 
 
 
