@@ -6,6 +6,7 @@ use App\Http\Controllers\PasienController;
 use App\Http\Controllers\KunjunganController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\RekamMedisObat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,12 +38,6 @@ Route::get('kunjungan/{id}', [KunjunganController::class, 'getKunjunganById']);
 Route::post('kunjungan', [KunjunganController::class, 'storeKunjungan']);
 Route::delete('kunjungan/{id}', [KunjunganController::class, 'destroyKunjungan']);
 Route::put('kunjungan/{id}', [KunjunganController::class, 'updateKunjungan']);
-
-Route::get('rekamMedis', [RekamMedisController::class, 'getRekamMedis']);
-Route::get('rekamMedis/{id}', [RekamMedisController::class, 'getRekamMedisById']);
-Route::post('rekamMedis', [RekamMedisController::class, 'storeRekamMedis']);
-Route::delete('rekamMedis/{id}', [RekamMedisController::class, 'destroyRekamMedis']);
-Route::put('rekamMedis/{id}', [RekamMedisController::class, 'updateRekamMedis']);
 
 Route::post('login', [AuthController::class, 'login']);
 
