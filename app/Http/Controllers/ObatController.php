@@ -63,7 +63,7 @@ class ObatController extends Controller
         //
     }
     public function getObat(){
-        $response['data'] = Obat::all();
+        $response['data'] = Obat::with(['dokter','pasien'])->orderBy('kode', 'asc') ->get();
         $response['message'] = 'List data Obat';
         $response['success'] = true;
 
